@@ -24,53 +24,41 @@ PREFIX = """/*
 package number
 
 object Prelude {
-  def getTypeInfo(x: Any) = {
-    if (x.isInstanceOf[Double])
-      DOUBLE_NUMB
-    else if (x.isInstanceOf[Float])
-      FLOAT_NUMB
-    else if (x.isInstanceOf[Long])
-      LONG_NUMB
-    else if (x.isInstanceOf[Short])
-      SHORT_NUMB
-    else if (x.isInstanceOf[Byte])
-      BYTE_NUMB
-    else if (x.isInstanceOf[Int])
-      INT_NUMB
-    else if (x.isInstanceOf[BigInt])
-      BIGINT_NUMB
-    else if (x.isInstanceOf[BigDecimal])
-      BIGDECIMAL_NUMB
-  }
+	def getTypeInfo(x: Any) = {
+		if (x.isInstanceOf[Double])
+			DOUBLE_NUMB
+		else if (x.isInstanceOf[Float])
+			FLOAT_NUMB
+		else if (x.isInstanceOf[Long])
+			LONG_NUMB
+		else if (x.isInstanceOf[Short])
+			SHORT_NUMB
+		else if (x.isInstanceOf[Byte])
+			BYTE_NUMB
+		else if (x.isInstanceOf[Int])
+			INT_NUMB
+		else if (x.isInstanceOf[BigInt])
+			BIGINT_NUMB
+		else if (x.isInstanceOf[BigDecimal])
+			BIGDECIMAL_NUMB
+	}
+""" + "\n".join(
+        '\timplicit def ' + x.lower() +'ToNumber(x: %s) = '
+        '\n\t\tnew Number(x.asInstanceOf[AnyRef], %s_NUMB)' % (
+            x, x.upper()) for x in TYPES) +\
+"""
+	implicit def bigIntToBigDecimal(x: BigInt) = BigDecimal(x.toString)
+	implicit def doubleToBigDecimal (x: Double) = BigDecimal(x)
 
-  implicit def doubleToDoubleNum(x: Double) =
-    new Number(x.asInstanceOf[AnyRef], DOUBLE_NUMB)
-  implicit def floatToFloatNum(x: Float) =
-    new Number(x.asInstanceOf[AnyRef], FLOAT_NUMB)
-  implicit def longToLongNum(x: Long) =
-    new Number(x.asInstanceOf[AnyRef], LONG_NUMB)
-  implicit def shortToShortNum(x: Short) =
-    new Number(x.asInstanceOf[AnyRef], SHORT_NUMB)
-  implicit def byteToShortNum(x: Byte) =
-    new Number(x.asInstanceOf[AnyRef], BYTE_NUMB)
-  implicit def intToIntNumb(x: Int) =
-    new Number(x.asInstanceOf[AnyRef], INT_NUMB)
-  implicit def bigIntToBigIntNumb(x: BigInt) =
-    new Number(x.asInstanceOf[AnyRef], BIGINT_NUMB)
-  implicit def bigDecimalToBigDecimalNumb(x: BigDecimal) =
-    new Number(x.asInstanceOf[AnyRef], BIGDECIMAL_NUMB)
-  implicit def bigIntToBigDecimal(x: BigInt) = BigDecimal(x.toString)
-  implicit def doubleToBigDecimal (x: Double) = BigDecimal(x)
-
-  val COMMON_NUMB: Byte = 0
-  val DOUBLE_NUMB: Byte = 1
-  val FLOAT_NUMB: Byte = 2
-  val LONG_NUMB: Byte = 3
-  val INT_NUMB: Byte = 4
-  val SHORT_NUMB: Byte = 5
-  val BYTE_NUMB: Byte = 6
-  val BIGINT_NUMB: Byte = 7
-  val BIGDECIMAL_NUMB: Byte = 8
+	val COMMON_NUMB: Byte = 0
+        val DOUBLE_NUMB: Byte = 1
+        val FLOAT_NUMB: Byte = 2
+        val LONG_NUMB: Byte = 3
+        val INT_NUMB: Byte = 4
+        val SHORT_NUMB: Byte = 5
+        val BYTE_NUMB: Byte = 6
+        val BIGINT_NUMB: Byte = 7
+        val BIGDECIMAL_NUMB: Byte = 8
 }
 
 import Prelude._
